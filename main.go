@@ -42,8 +42,10 @@ func main() {
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGINT)
 
-	wg := sync.WaitGroup{}
-	wg.Add(len(cfg.Services))
+	services := map[string]struct{}{}
+	for _, r := range flag.Args() {
+		services[r] = struct{}{}
+	}
 
 	var nameMaxLen int
 	for name := range cfg.Services {
@@ -52,8 +54,16 @@ func main() {
 		}
 	}
 
+	wg := sync.WaitGroup{}
+
 	var i int
 	for name := range cfg.Services {
+		if len(services) > 0 {
+			if _, ok := services[name]; !ok {
+				continue
+			}
+		}
+		wg.Add(1)
 		go exec.Exec(&wg, cfg, name, nameMaxLen, colors[i%len(colors)])
 		i++
 	}

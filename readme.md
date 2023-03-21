@@ -26,8 +26,8 @@ go install github.com/negasus/gomrun@latest
 ## Run
 
 ```
-$ gomrun 
-$ gomrun --config /path/to/config.yml
+$ gomrun [<service name> <service name> ...]
+$ gomrun --config /path/to/config.yml [<service name> <service name> ...]
 ```
 
 Default config path: `.gomrun.yml`
