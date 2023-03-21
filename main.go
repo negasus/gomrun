@@ -14,7 +14,7 @@ import (
 	"github.com/negasus/gomrun/internal/exec"
 )
 
-var version = "v0.1.0"
+var version = "v0.1.1"
 
 var (
 	configFile string

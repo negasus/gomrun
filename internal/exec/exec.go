@@ -17,12 +17,17 @@ import (
 func Exec(wg *sync.WaitGroup, cfg *config.Config, name string, nameMaxLen int, serviceColor color.Attribute) {
 	defer wg.Done()
 
-	color.Cyan("starting %q\n", name)
-
 	srv, ok := cfg.Services[name]
 	if !ok {
 		color.Red("unexpected error, service %q not found\n", name)
 		return
+	}
+
+	if srv.Delay == 0 {
+		color.Cyan("starting %q\n", name)
+	} else {
+		color.Cyan("starting %q with delay %d sec\n", name, srv.Delay)
+		time.Sleep(time.Duration(srv.Delay) * time.Second)
 	}
 
 	target := srv.Cmd

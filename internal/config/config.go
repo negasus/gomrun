@@ -18,6 +18,7 @@ type Service struct {
 	Args        []string          `yaml:"args"`
 	Envset      []string          `yaml:"envset"`
 	Environment map[string]string `yaml:"environment"`
+	Delay       int               `yaml:"delay"`
 }
 
 func (c *Service) validate(cfg *Config) error {
@@ -30,6 +31,10 @@ func (c *Service) validate(cfg *Config) error {
 		if !ok || es == nil {
 			return fmt.Errorf("envset %q not found", n)
 		}
+	}
+
+	if c.Delay < 0 {
+		return fmt.Errorf("delay must be greater or equals 0")
 	}
 
 	return nil

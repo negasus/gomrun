@@ -73,6 +73,7 @@ envset:
 
 ```yaml
 serviceName:
+  delay: 1
   cmd: /path/to/binary
   build:
     context: /Users/user/srv2
@@ -84,14 +85,14 @@ serviceName:
     ADDRESS: 127.0.0.1:4403
 ```
 
-You must use `cmd` or `build` sections. Not both.
+- delay - delay before start service in seconds, optional
+- cmd - path to binary, required if build is not defined
+- build - build service, required if cmd is not defined
+  - context - path to project, required
+  - path - path to binary, optional
+- args - arguments for binary, optional
+- work_dir - working directory for service, optional
+- envset - predefined set of environment variables, optional
+- environment - custom environment variables, optional
 
-`cmd` allows you run some binary
-
-`build` allows to build go project and run it
-
-You can define `args` strings array for run arguments
-
-`envset` allows you to reuse predefined set of environment variables
-
-`environment` allows to define custom env variables for this service
+> You must use `cmd` or `build` options. Not both.
