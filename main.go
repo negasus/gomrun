@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"os/signal"
 	"sync"
@@ -12,6 +13,8 @@ import (
 	"github.com/negasus/gomrun/internal/config"
 	"github.com/negasus/gomrun/internal/exec"
 )
+
+var version = "v0.1.0"
 
 var (
 	configFile string
@@ -24,6 +27,8 @@ var (
 )
 
 func main() {
+	fmt.Printf("%s %s\n", color.CyanString("gomrun"), color.GreenString(version))
+
 	flag.StringVar(&configFile, "config", ".gomrun.yml", "config file")
 	flag.Parse()
 
