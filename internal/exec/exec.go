@@ -1,10 +1,12 @@
 package exec
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -60,6 +62,14 @@ func Exec(wg *sync.WaitGroup, cfg *config.Config, name string, nameMaxLen int, s
 		cmd.Env = append(cmd.Env, n+"="+v)
 	}
 
+	if srv.EnvFile != "" {
+		errEnvFile := loadEnvFile(cmd, srv.EnvFile)
+		if errEnvFile != nil {
+			color.Red("error load env file %q, %v\n", srv.EnvFile, errEnvFile)
+			return
+		}
+	}
+
 	errRun := cmd.Start()
 	if errRun != nil {
 		color.Red("service %q start error, %v\n", name, errRun)
@@ -73,6 +83,25 @@ func Exec(wg *sync.WaitGroup, cfg *config.Config, name string, nameMaxLen int, s
 	}
 
 	color.Cyan("service %q terminated\n", name)
+}
+
+func loadEnvFile(cmd *exec.Cmd, file string) error {
+	data, errReadFile := os.ReadFile(file)
+	if errReadFile != nil {
+		return fmt.Errorf("error read env file %q, %w", file, errReadFile)
+	}
+
+	for _, line := range strings.Split(string(data), "\n") {
+		if strings.HasPrefix(line, "#") || strings.TrimSpace(line) == "" {
+			continue
+		}
+		if !strings.Contains(line, "=") {
+			return fmt.Errorf("invalid env line %q", line)
+		}
+		cmd.Env = append(cmd.Env, line)
+	}
+
+	return nil
 }
 
 func build(target string, srv config.Service) error {

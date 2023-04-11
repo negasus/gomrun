@@ -17,6 +17,7 @@ type Service struct {
 	Build       *Build            `yaml:"build"`
 	Args        []string          `yaml:"args"`
 	Envset      []string          `yaml:"envset"`
+	EnvFile     string            `yaml:"env_file"`
 	Environment map[string]string `yaml:"environment"`
 	Delay       int               `yaml:"delay"`
 }

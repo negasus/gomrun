@@ -44,6 +44,7 @@ services:
     build:
       context: /Users/user/srv1
     envset: ['common']
+    env_file: /path/to/.env
 
   my_service_2:
     build:
@@ -92,6 +93,7 @@ serviceName:
   - path - path to binary, optional
 - args - arguments for binary, optional
 - work_dir - working directory for service, optional
+- env_file - path to .env file, optional
 - envset - predefined set of environment variables, optional
 - environment - custom environment variables, optional
 
