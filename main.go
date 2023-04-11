@@ -1,10 +1,12 @@
 package main
 
 import (
+	_ "embed"
 	"flag"
 	"fmt"
 	"os"
 	"os/signal"
+	"regexp"
 	"sync"
 	"syscall"
 
@@ -14,7 +16,20 @@ import (
 	"github.com/negasus/gomrun/internal/exec"
 )
 
-var version = "v0.1.1"
+//go:embed changelog.md
+var changelog string
+
+func getVersion() string {
+	version := "undefined"
+	re := regexp.MustCompile("# Changelog\n\n## (.*) \\(")
+
+	v := re.FindStringSubmatch(changelog)
+	if len(v) > 1 {
+		version = v[1]
+	}
+
+	return version
+}
 
 var (
 	configFile string
@@ -27,7 +42,7 @@ var (
 )
 
 func main() {
-	fmt.Printf("%s %s\n", color.CyanString("gomrun"), color.GreenString(version))
+	fmt.Printf("%s %s\n", color.CyanString("gomrun"), color.GreenString(getVersion()))
 
 	flag.StringVar(&configFile, "config", ".gomrun.yml", "config file")
 	flag.Parse()
