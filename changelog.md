@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.3 (2023-04-11)
+
+- get version from changelog file
+
 ## v0.1.2 (2023-04-11)
 
 - add `env_file` options to service config
